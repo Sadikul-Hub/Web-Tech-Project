@@ -1,0 +1,47 @@
+<html>
+<head>
+  <title>View Stored Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .entry {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Stored User Submissions</h2>
+<div id="storedDataDisplay"></div>
+
+<script>
+  function showStoredData() {
+    let data = JSON.parse(localStorage.getItem("formDataArray")) || [];
+    let display = document.getElementById("storedDataDisplay");
+    display.innerHTML = "";
+
+    if (data.length === 0) {
+      display.innerHTML = "No data found!";
+      return;
+    }
+
+    data.forEach((user, index) => {
+      display.innerHTML += `
+        <div class="entry">
+          <strong>Entry ${index + 1}</strong><br>
+          <strong>Full Name:</strong> ${user.fullname}<br>
+          <strong>Email:</strong> ${user.email}<br>
+          <strong>Password:</strong> ${user.password}<br>
+          <strong>Age:</strong> ${user.age}
+        </div>
+      `;
+    });
+  }
+  window.onload = showStoredData;
+</script>
+</body>
+</html>

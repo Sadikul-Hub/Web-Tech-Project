@@ -1,0 +1,97 @@
+<html>
+<head>
+  <title>Form Validation</title>
+  <style>
+    .error { color: red; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+
+<h2>Registration Form</h2>
+<form id="registrationForm" onsubmit="return validateForm()">
+  <label>Full Name:</label><br>
+  <input type="text" id="fullname"><br>
+  <span id="nameError" class="error"></span><br>
+
+  <label>Email:</label><br>
+  <input type="text" id="email"><br>
+  <span id="emailError" class="error"></span><br>
+
+  <label>Password:</label><br>
+  <input type="password" id="password"><br>
+  <span id="passwordError" class="error"></span><br>
+
+  <label>Confirm Password:</label><br>
+  <input type="password" id="confirmPassword"><br>
+  <span id="confirmError" class="error"></span><br>
+
+  <label>Age:</label><br>
+  <input type="number" id="age"><br>
+  <span id="ageError" class="error"></span><br><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<p><a href="view.html" target="_blank">View Stored Data</a></p>
+
+<script>
+function validateForm() {
+  let isValid = true;
+  document.getElementById("nameError").innerHTML = "";
+  document.getElementById("emailError").innerHTML = "";
+  document.getElementById("passwordError").innerHTML = "";
+  document.getElementById("confirmError").innerHTML = "";
+  document.getElementById("ageError").innerHTML = "";
+
+  let fullname = document.getElementById("fullname").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let password = document.getElementById("password").value;
+  let confirmPassword = document.getElementById("confirmPassword").value;
+  let age = document.getElementById("age").value;
+
+  if (fullname === "") {
+    document.getElementById("nameError").innerHTML = "Full name is required.";
+    isValid = false;
+  }
+
+  const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+  if (!email.match(emailPattern)) {
+    document.getElementById("emailError").innerHTML = "Enter a valid email.";
+    isValid = false;
+  }
+
+  if (password.length < 6) {
+    document.getElementById("passwordError").innerHTML = "Password must be at least 6 characters.";
+    isValid = false;
+  }
+
+  if (password !== confirmPassword) {
+    document.getElementById("confirmError").innerHTML = "Passwords do not match.";
+    isValid = false;
+  }
+
+  if (age < 18 || age === "") {
+    document.getElementById("ageError").innerHTML = "You must be 18 or older.";
+    isValid = false;
+  }
+
+  if (isValid) {
+    let existingData = JSON.parse(localStorage.getItem("formDataArray")) || [];
+
+    let newUser = {
+      fullname: fullname,
+      email: email,
+      password: password,
+      age: age
+    };
+    existingData.push(newUser);
+    localStorage.setItem("formDataArray", JSON.stringify(existingData));
+
+    alert("Form submitted and data saved!");
+    document.getElementById("registrationForm").reset();
+  }
+  return false;
+}
+</script>
+</body>
+</html>
